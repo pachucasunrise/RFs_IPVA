@@ -11,9 +11,12 @@
 
 ################################################################################
 # 0. Locations, packages, functions
+cd "C:/Program Files/R/R-3.5.3/bin"
+R
+
 packages<-c('readstata13','data.table','tidyr','formattable','tidyverse',
 	'dplyr','gdata','foreign','readxl','matrixStats','tableone','Rcmdr','mice',
-	'magrittr','varhandle','zoo','mice','backports')
+	'magrittr','varhandle','zoo','mice','backports','tableone')
 
 source("http://bioconductor.org/biocLite.R")
 
@@ -37,6 +40,8 @@ rm(list=ls())
 #The following filepaths have been removed for data security purposes
 #loc_inp<-[input location]
 #loc_out<-[output location]
+#loc_func<-[functions location]
+
 setwd(loc_out)
 
 
@@ -88,7 +93,7 @@ imp_girls$imp$patmon_score[imp_girls$imp$patmon_score>13] <- 1
 imp_boys.long$patmon_score[imp_boys.long$patmon_score<=13] <- 0
 imp_boys.long$patmon_score[imp_boys.long$patmon_score>13] <- 1
 imp_boys.long$patmon_score[is.na(imp_boys.long$patmon_score)==TRUE] <- "NA"
-imp_girls.long$patmon_score[imp_girls.long$patmon_score>13] <- 0
+imp_girls.long$patmon_score[imp_girls.long$patmon_score<=13] <- 0
 imp_girls.long$patmon_score[imp_girls.long$patmon_score>13] <- 1
 imp_girls.long$patmon_score[is.na(imp_girls.long$patmon_score)==TRUE] <- "NA"
 
@@ -105,7 +110,7 @@ imp_girls$imp$mfq_total_ccs[imp_girls$imp$mfq_total_ccs>11] <- 1
 imp_boys.long$mfq_total_ccs[imp_boys.long$mfq_total_ccs<=11] <- 0
 imp_boys.long$mfq_total_ccs[imp_boys.long$mfq_total_ccs>11] <- 1
 imp_boys.long$mfq_total_ccs[is.na(imp_boys.long$mfq_total_ccs)==TRUE] <- "NA"
-imp_girls.long$mfq_total_ccs[imp_girls.long$mfq_total_ccs>11] <- 0
+imp_girls.long$mfq_total_ccs[imp_girls.long$mfq_total_ccs<=11] <- 0
 imp_girls.long$mfq_total_ccs[imp_girls.long$mfq_total_ccs>11] <- 1
 imp_girls.long$mfq_total_ccs[is.na(imp_girls.long$mfq_total_ccs)==TRUE] <- "NA"
 
@@ -122,7 +127,7 @@ imp_girls$imp$mfq_total_cct[imp_girls$imp$mfq_total_cct>11] <- 1
 imp_boys.long$mfq_total_cct[imp_boys.long$mfq_total_cct<=11] <- 0
 imp_boys.long$mfq_total_cct[imp_boys.long$mfq_total_cct>11] <- 1
 imp_boys.long$mfq_total_cct[is.na(imp_boys.long$mfq_total_cct)==TRUE] <- "NA"
-imp_girls.long$mfq_total_cct[imp_girls.long$mfq_total_cct>11] <- 0
+imp_girls.long$mfq_total_cct[imp_girls.long$mfq_total_cct<=11] <- 0
 imp_girls.long$mfq_total_cct[imp_girls.long$mfq_total_cct>11] <- 1
 imp_girls.long$mfq_total_cct[is.na(imp_girls.long$mfq_total_cct)==TRUE] <- "NA"
 
@@ -139,7 +144,7 @@ imp_girls$imp$alc_score[imp_girls$imp$alc_score>7] <- 1
 imp_boys.long$alc_score[imp_boys.long$alc_score<=7] <- 0
 imp_boys.long$alc_score[imp_boys.long$alc_score>7] <- 1
 imp_boys.long$alc_score[is.na(imp_boys.long$alc_score)==TRUE] <- "NA"
-imp_girls.long$alc_score[imp_girls.long$alc_score>7] <- 0
+imp_girls.long$alc_score[imp_girls.long$alc_score<=7] <- 0
 imp_girls.long$alc_score[imp_girls.long$alc_score>7] <- 1
 imp_girls.long$alc_score[is.na(imp_girls.long$alc_score)==TRUE] <- "NA"
 
@@ -156,23 +161,33 @@ imp_girls$imp$score_13_fi[imp_girls$imp$score_13_fi>116] <- 1
 imp_boys.long$score_13_fi[imp_boys.long$score_13_fi<=116] <- 0
 imp_boys.long$score_13_fi[imp_boys.long$score_13_fi>116] <- 1
 imp_boys.long$score_13_fi[is.na(imp_boys.long$score_13_fi)==TRUE] <- "NA"
-imp_girls.long$score_13_fi[imp_girls.long$score_13_fi>116] <- 0
+imp_girls.long$score_13_fi[imp_girls.long$score_13_fi<=116] <- 0
 imp_girls.long$score_13_fi[imp_girls.long$score_13_fi>116] <- 1
 imp_girls.long$score_13_fi[is.na(imp_girls.long$score_13_fi)==TRUE] <- "NA"
 
 
 # Now rel_ind_021, rsb_fi and hosp_fi which are currently 1 or NA
+imp_boys$data$rel_ind_021[is.na(imp_boys$data$rel_ind_021)==TRUE] <- "0"
+imp_boys$imp$rel_ind_021[is.na(imp_boys$data$rel_ind_021)==TRUE] <- "0"
 table(imp_boys.long$rel_ind_021, exclude=NULL)
 levels(imp_boys.long$rel_ind_021) <- c("0","1")
 imp_boys.long$rel_ind_021[is.na(imp_boys.long$rel_ind_021)==TRUE] <- "0"
 table(imp_boys.long$rel_ind_021, exclude=NULL)
+
+imp_boys$data$rel_def_017[is.na(imp_boys$data$rel_def_017)==TRUE] <- "0"
+imp_boys$imp$rel_def_017[is.na(imp_boys$data$rel_def_017)==TRUE] <- "0"
 levels(imp_boys.long$rel_def_017) <- c("0","1")
 imp_boys.long$rel_def_017[is.na(imp_boys.long$rel_def_017)==TRUE] <- "0"
 levels(imp_boys.long$rel_ind_017) <- c("0","1")
 imp_boys.long$rel_ind_017[is.na(imp_boys.long$rel_ind_017)==TRUE] <- "0"
 
+imp_girls$data$rel_ind_021[is.na(imp_girls$data$rel_ind_021)==TRUE] <- "0"
+imp_girls$imp$rel_ind_021[is.na(imp_girls$data$rel_ind_021)==TRUE] <- "0"
 levels(imp_girls.long$rel_ind_021) <- c("0","1")
 imp_girls.long$rel_ind_021[is.na(imp_girls.long$rel_ind_021)==TRUE] <- "0"
+
+imp_girls$data$rel_def_017[is.na(imp_girls$data$rel_def_017)==TRUE] <- "0"
+imp_girls$imp$rel_def_017[is.na(imp_girls$data$rel_def_017)==TRUE] <- "0"
 levels(imp_girls.long$rel_def_017) <- c("0","1")
 imp_girls.long$rel_def_017[is.na(imp_girls.long$rel_def_017)==TRUE] <- "0"
 levels(imp_girls.long$rel_ind_017) <- c("0","1")
@@ -221,7 +236,7 @@ rm(num_girls,num_boys)
 
 
 ## ---- For in text: Numbers in a relationship by all potential risk factors ------
-num_row <- sum(sapply(c(rfs #,aces
+num_row <- sum(sapply(c(rfs,aces
 			), function(x) length(unique(imp_boys.long[imp_all.long$.imp==0,x],
 				exclude=NULL))))+2
 
@@ -365,34 +380,38 @@ rm(subtypes, num_row, count, count2, a, age, t, type, out)
 ## ---- Table 2: Relative risks of interpersonal-violence and abuse (IPVA) by 21 
 #years old by socio-demographic/clinical variables and sex. ---------------------
 #Function to make RR tables
-source("O:/Training/R/rrTable.R")
-out_rfs_mi <- rrTable(imp_boys,imp_boys.long,imp_boys,imp_girls.long,"vic_021",
+source(paste0(loc_func,'rrTable.R'))
+
+out_rfs_mi <- rrTable(imp_boys,imp_boys.long,imp_girls,imp_girls.long,"vic_021",
 	"per_021",rfs,2)
 write.csv(out_rfs_mi, "rfs_vic_perp_mi_021.csv", row.names = FALSE, na = "")
 #Replace object with numbers to 10 decimal places so can calculate change in 
 #coefficients later
-out_rfs_mi <- rrTable(imp_boys,imp_boys.long,imp_boys,imp_girls.long,"vic_021",
+out_rfs_mi <- rrTable(imp_boys,imp_boys.long,imp_girls,imp_girls.long,"vic_021",
 	"per_021",rfs,2)
+
 
 ## ---- Table 3: Relative risks of interpersonal-violence and abuse (IPVA) by 21 
 #years old by Adverse Childhood Experiences (ACEs)and sex -----------------------
-out_aces_mi <- rrTable(imp_boys.long,imp_girls.long,vic_021,per_021,aces,2)
+out_aces_mi <- rrTable(imp_boys,imp_boys.long,imp_girls,imp_girls.long,"vic_021",
+	"per_021",aces,2)
 write.csv(out_aces_mi, "aces_vic_perp_mi_021.csv", row.names = FALSE, na = "")
-#Replace object with numbers to 10 decimal places so can calculate change in 
-#coefficients later
-out_aces_mi <- rrTable(imp_boys.long,imp_girls.long,vic_021,per_021,aces,10)
-
+out_aces_mi <- rrTable(imp_boys,imp_boys.long,imp_girls,imp_girls.long,"vic_021",
+	"per_021",aces,10)
 
 ## ---- Extended Data Table A: ALSPAC study questions/responses used to capture 
 #romantic relationships ----------
 
+
 ## ---- Extended Data Table B: Details about study variables of interest -------
+
 
 ## ---- Extended Data Box A: Notes on imputation -------------------------------
 
+
 ## ---- Extended Data Table C: Cohort Characteristics --------------------------
 sex_stats <- print(
-	           CreateCatTable(vars = c(rfs#,aces
+	           CreateCatTable(vars = c(rfs, aces
 	           	), data = imp_all.long[imp_all.long$.imp==0,], strata = c("kz021"), includeNA = TRUE),
 	             showAllLevels = TRUE,
 	             includeNA = TRUE,
@@ -406,7 +425,7 @@ rm(sex_stats)
 ## ---- Extended Data Table D: Prevalence of Interpersonal Violence and Abuse 
 #(IPVA) victimisation and perpetration by socio-demographic/ clinical variables 
 #and sex -------------------------------------------------------------------
-source("O:/Training/R/prevTable.R")
+source(paste0(loc_func,'prevTable.R'))
 out <- prevTable(imp_boys.long,imp_girls.long,rfs)
 write.csv(out, "rfs_vic_perp_mi_props.csv", row.names = FALSE, na = "")
 
@@ -420,14 +439,16 @@ write.csv(out, "aces_vic_perp_mi_props.csv", row.names = FALSE, na = "")
 
 ## ---- Extended Data Table F: Relative risks of interpersonal-violence and abuse 
 #(IPVA) by 21 years old by socio-demographic/clinical variables and sex (missing 
-#risk factor data not imputed
-source("O:/Training/R/rrTable_cc.R")
-out_rfs_cca <- rrTable_cc(imp_boys.long,imp_girls.long,"vic_021","per_021",rfs,2)
+#risk factor data not imputed)
+source(paste0(loc_func,'rrTable_c.R'))
+orig_boys <- imp_boys.long[imp_boys.long$.imp == 0,]
+orig_girls <- imp_girls.long[imp_girls.long$.imp == 0,]
+out_rfs_cca <- rrTable_c(orig_boys,orig_girls,"vic_021","per_021",rfs,2)
 write.csv(out_rfs_cca, "rfs_vic_perp_cca_021.csv", row.names = FALSE, na = "")
 
 
 ################################################################################
-# 4. More results for in manuscript text
+# 4. Additional checks
 ################################################################################
 
 ## ---- % change in coefficients for RFs between mi and cca --------------------
@@ -435,7 +456,7 @@ write.csv(out_rfs_cca, "rfs_vic_perp_cca_021.csv", row.names = FALSE, na = "")
 #Note that dimensions are diff between mi and cca tables
 out_rfs_mi <- rrTable(imp_boys,imp_boys.long,imp_girls,imp_girls.long,"vic_021",
 	"per_021",rfs,10)
-out_rfs_cca <- rrTable_cc(imp_boys.long,imp_girls.long,"vic_021","per_021",rfs,10)
+out_rfs_cca <- rrTable_c(imp_boys.long,imp_girls.long,"vic_021","per_021",rfs,10)
 
 source("O:/Training/R/change_coef.R")
 out_rfs_change <- change_coef(out_rfs_mi,out_rfs_cca,2)
@@ -444,6 +465,82 @@ write.csv(out_rfs_change, "rfs_change_coefs.csv", row.names = FALSE, na = "")
 change_prop <- c(out_rfs_change[,11],out_rfs_change[,12],out_rfs_change[,13],
 	out_rfs_change[,14])
 summary(change_prop)
+
+
+## ---- Check distribution of observed and imputed variables -------------------------------------------------------------------
+sex_stats_cca <- print(
+	           CreateCatTable(vars = rfs, data = imp_all.long[imp_all.long$.imp==0,], 
+	           	 strata = c("kz021"), includeNA = FALSE),
+	             showAllLevels = TRUE,
+	             #quote = TRUE,
+	             test = FALSE,
+	             format = "p")
+
+boys_cca <- data.frame(matrix(NA, nrow = dim(sex_stats_cca)[1], ncol = 3))
+girls_cca <- data.frame(matrix(NA, nrow = dim(sex_stats_cca)[1], ncol = 3))
+
+boys_cca[,1] <- dimnames(sex_stats_cca)[[1]]
+boys_cca[,2:3] <- sex_stats_cca[,1:2]
+colnames(boys_cca) <- c("Var","Level","obs_prop")
+girls_cca[,1] <- dimnames(sex_stats_cca)[[1]]
+girls_cca[,2:3] <- sex_stats_cca[,c(1,3)]
+colnames(girls_cca) <- c("Var","Level","obs_prop")
+
+no_imp <- 45
+count <- c(1:no_imp)
+for (c in count){
+	    	assign(paste0("sex_stats_mi",c), 
+			value = print(CreateCatTable(vars = rfs, data = imp_all.long[imp_all.long$.imp==c,], 
+	       	 strata = c("kz021"), includeNA = FALSE),
+	         showAllLevels = TRUE,
+	         #quote = TRUE,
+	         test = FALSE,
+	         format = "p"))
+	}
+
+boys_mi <- data.frame(matrix(NA, nrow = dim(sex_stats_mi1)[1], ncol = (no_imp+3)))
+girls_mi <- data.frame(matrix(NA, nrow = dim(sex_stats_mi1)[1], ncol = (no_imp+3)))
+
+boys_mi[,1] <- dimnames(sex_stats_mi1)[[1]]
+boys_mi[,2:3] <- sex_stats_mi1[,1:2]
+girls_mi[,1] <- dimnames(sex_stats_mi1)[[1]]
+girls_mi[,2:3] <- sex_stats_mi1[,c(1,3)]
+
+names <- NULL
+for (c in count){
+	table <- paste0("sex_stats_mi",c)
+	boys_mi[,c+2] <- as.numeric(get(table)[,2])
+	girls_mi[,c+2] <- as.numeric(get(table)[,3])
+	names <- c(names,paste0("mi",c))
+	}
+
+colnames(boys_mi) <- c("Var","Level",names,"ave_mi_prop")
+colnames(girls_mi) <- c("Var","Level",names,"ave_mi_prop")
+
+for (n in names){
+	boys_mi[,n] < as.double(boys_mi[,n])
+	girls_mi[,n] < as.double(girls_mi[,n])
+	}
+
+boys_mi[,"ave_mi_prop"] <- round(rowMeans(boys_mi[,names]),digits=1)
+girls_mi[,"ave_mi_prop"] <- round(rowMeans(girls_mi[,names]),digits=1)
+
+#Now merge observed and completed
+boys_mi[,1] <- ifelse(as.character(boys_mi[,1])!="", boys_mi[,1], NA)
+boys_mi[,1] <- na.locf(boys_mi[,1])
+boys_cca[,1] <- ifelse(as.character(boys_cca[,1])!="", boys_cca[,1], NA)
+boys_cca[,1] <- na.locf(boys_cca[,1])
+boys_merge <- merge(boys_mi, boys_cca, by=c("Var","Level"))
+boys_merge <- boys_merge[,c("Var","Level","ave_mi_prop","obs_prop")]
+write.csv(boys_merge, "props_obs_vs_mi_boys.csv", row.names = FALSE, na = "")
+
+girls_mi[,1] <- ifelse(as.character(girls_mi[,1])!="", girls_mi[,1], NA)
+girls_mi[,1] <- na.locf(girls_mi[,1])
+girls_cca[,1] <- ifelse(as.character(girls_cca[,1])!="", girls_cca[,1], NA)
+girls_cca[,1] <- na.locf(girls_cca[,1])
+girls_merge <- merge(girls_mi, girls_cca, by=c("Var","Level"))
+girls_merge <- girls_merge[,c("Var","Level","ave_mi_prop","obs_prop")]
+write.csv(girls_merge, "props_obs_vs_mi_girls.csv", row.names = FALSE, na = "")
 
 
 ## ---- end -------------------------------------------------------------------
