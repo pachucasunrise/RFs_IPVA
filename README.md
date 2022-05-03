@@ -4,7 +4,7 @@ R code pertaining to the paper 'Risk factors for intimate partner violence and a
 
 Short abstract: In Avon Longitudinal Study of Parents and Children (ALSPAC) data, we reported the prevalence of interpersonal violence and abuse (IPVA) up to 21 years old, by a range of demographic, characteristics, extreme parental monitoring, mental health conditions, externalising behaviours (e.g. regular smoking), no-low education/employment, adverse childhood experiences. 
 
-The paper is currently at submission stage with Wellcome Open Research: https://wellcomeopenresearch.org/articles/5-176
+The paper has been published in Wellcome Open Research: https://wellcomeopenresearch.org/articles/5-176/v3
 
 analyses.R is main analysis file to re-produce all tables and values cited in the text.  
 This file calls the following functions:
